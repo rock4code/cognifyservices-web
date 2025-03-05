@@ -1,20 +1,44 @@
-const plugin = require('tailwindcss/plugin')
-const theme_config = require("./src/config/theme.json");
+const plugin = require("tailwindcss/plugin");
+const fs = require("fs");
+const path = require("path");
 
-let fontPrimaryType, fontSecondaryType;
-if (theme_config.fonts.font_family.primary) {
-  fontPrimaryType = theme_config.fonts.font_family.primary_type;
-}
-if (theme_config.fonts.font_family.secondary) {
-  fontSecondaryType = theme_config.fonts.font_family.secondary_type;
+// Cargar el archivo de configuración de tema de forma segura
+let theme_config = {};
+const themePath = path.resolve(__dirname, "./src/config/theme.json");
+
+if (fs.existsSync(themePath)) {
+  theme_config = require(themePath);
+} else {
+  console.warn("⚠️ Warning: No se encontró 'theme.json'. Usando configuración predeterminada.");
+  theme_config = {
+    fonts: {
+      font_family: {
+        primary: "sans-serif",
+        primary_type: "sans-serif",
+        secondary: "sans-serif",
+        secondary_type: "sans-serif",
+      },
+    },
+    colors: ["red", "blue", "green"],
+  };
 }
 
+// Definir fuentes con valores predeterminados
+let fontPrimaryType = theme_config.fonts?.font_family?.primary_type || "sans-serif";
+let fontSecondaryType = theme_config.fonts?.font_family?.secondary_type || "sans-serif";
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
-  safelist: [{ pattern: /^col-/ }, ...theme_config.colors.flatMap((color) => [{ pattern: new RegExp(`bg-${color}`) }]), {pattern: /^btn-/}],
-  darkMode: "selector",
+  content: [
+    "./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}",
+    "./public/**/*.html",
+  ],
+  safelist: [
+    { pattern: /^col-/ },
+    { pattern: /^btn-/ },
+    ...(theme_config.colors || []).flatMap((color) => [{ pattern: new RegExp(`bg-${color}`) }]),
+  ],
+  darkMode: "class", // Evita problemas en GitHub Pages
   theme: {
     container: {
       center: true,
@@ -22,44 +46,41 @@ module.exports = {
     },
     extend: {
       colors: {
-        ...theme_config.colors.reduce((acc, key) => {
-          acc[key] = 'rgba(var(--' + key + '))';
-          return acc;
-        }, {}),
+        ...(Array.isArray(theme_config.colors)
+          ? theme_config.colors.reduce((acc, key) => {
+              acc[key] = `rgba(var(--${key}))`;
+              return acc;
+            }, {})
+          : {}),
       },
       fontFamily: {
         primary: ["var(--font-primary)", fontPrimaryType],
         secondary: ["var(--font-secondary)", fontSecondaryType],
       },
       textShadow: {
-        // --tw-shadow-color is not defined in tailwindcss by now
-        sm: '0 0px 2px var(--tw-shadow-color)',
-        DEFAULT: '0 0px 3px var(--tw-shadow-color)',
-        lg: '0 0px 8px var(--tw-shadow-color)',
+        sm: "0 0px 2px var(--tw-shadow-color)",
+        DEFAULT: "0 0px 3px var(--tw-shadow-color)",
+        lg: "0 0px 8px var(--tw-shadow-color)",
       },
-
-      // Custom animations
-      // Defined keyframes
       keyframes: {
         "fade-in": {
-          '0%': { transform: 'translateY(15pt)', opacity: 0 },
-          '100%': { transform: 'translateY(0pt)' },
+          "0%": { transform: "translateY(15pt)", opacity: 0 },
+          "100%": { transform: "translateY(0pt)", opacity: 1 },
         },
         "fade-out": {
-          '0%': { transform: 'translateY(0pt)' },
-          '100%': { transform: 'translateY(15pt)', opacity: 0 },
+          "0%": { transform: "translateY(0pt)", opacity: 1 },
+          "100%": { transform: "translateY(15pt)", opacity: 0 },
         },
-        "dissappear": {
-          '0%': { opacity: 1, visibility: 'visible' },
-          '100%': { visibility: 'hidden', opacity: 0},
+        disappear: {
+          "0%": { opacity: 1, visibility: "visible" },
+          "100%": { opacity: 0, visibility: "hidden" },
         },
       },
-      // Defined animations
       animation: {
-        "fade-in": 'fade-in 1s ease-in-out',
-        "fade-out": 'fade-out 1s ease-in-out',
-        "dissappear": 'dissappear 1.5s ease-in-out forwards',
-      }
+        "fade-in": "fade-in 1s ease-in-out",
+        "fade-out": "fade-out 1s ease-in-out",
+        disappear: "disappear 1.5s ease-in-out forwards",
+      },
     },
   },
   plugins: [
@@ -79,12 +100,12 @@ module.exports = {
     plugin(function ({ matchUtilities, theme }) {
       matchUtilities(
         {
-          'text-shadow': (value) => ({
+          "text-shadow": (value) => ({
             textShadow: value,
           }),
         },
-        { values: theme('textShadow') }
-      )
-    })
+        { values: theme("textShadow") }
+      );
+    }),
   ],
 };
