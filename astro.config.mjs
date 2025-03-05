@@ -6,21 +6,26 @@ import { defineConfig, sharpImageService } from "astro/config";
 import config from "./src/config/config.json";
 import AutoImport from "astro-auto-import";
 
-// https://astro.build/config
+const BASE_URL = "https://rock4code.github.io/cognifyservices-web"; 
+const BASE_PATH = "/cognifyservices-web/"; 
+
 export default defineConfig({
-  site: config.site.base_url ? config.site.base_url : "http://astrotemplatesitey.com",
-  base: config.site.base_path ? config.site.base_path : "/",
+  site: BASE_URL,
+  base: BASE_PATH,
   trailingSlash: config.site.trailing_slash ? "always" : "never",
+  output: "static",
+  build: {
+    format: "directory",
+  },
   vite: {
     css: {
       preprocessorOptions: {
         scss: {
-          api: "modern-compiler"
-        }
-      }
-    }
+          api: "modern-compiler",
+        },
+      },
+    },
   },
-  // Image optimization service
   image: {
     service: sharpImageService(),
   },
@@ -29,7 +34,6 @@ export default defineConfig({
     sitemap(),
     tailwind(),
     AutoImport({
-      // import react components to use in mdx
       imports: [
         "@/components/react/FeatherIcon.tsx",
         "@/components/CounterComponent.astro",
@@ -38,12 +42,12 @@ export default defineConfig({
         "@/components/Badge.astro",
       ],
     }),
-    mdx()
+    mdx(),
   ],
   markdown: {
     shikiConfig: {
       theme: "one-dark-pro",
       wrap: true,
-    }
-  }
+    },
+  },
 });

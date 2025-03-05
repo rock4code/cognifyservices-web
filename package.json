@@ -11,7 +11,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "format": "prettier -w ."
+    "format": "prettier -w .",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -36,6 +37,7 @@
     "@types/marked": "^5.0.2",
     "@types/react": "^18.2.54",
     "autoprefixer": "^10.4.17",
+    "gh-pages": "^6.3.0",
     "postcss": "^8.4.34",
     "prettier": "^3.2.5",
     "prettier-plugin-astro": "^0.13.0",
