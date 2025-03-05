@@ -4,16 +4,21 @@ import Base from "@/layouts/Base.astro";
 import { getEntry } from "astro:content";
 
 const features = await getEntry("features", "index");
+
+if (!features) {
+  throw new Error("No se encontró la entrada para 'features/index'.");
+}
+
 const { Content } = await features.render();
 ---
 
 <Base>
   <section class="py-16">
     <div class="container">
-      <PageHeader page_data={features.data} />
+      {features.data && <PageHeader page_data={features.data} />}
     </div>
     <div class="container">
-       <Content />
+      <Content />
     </div>
   </section>
 </Base>

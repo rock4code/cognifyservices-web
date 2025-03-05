@@ -45,15 +45,8 @@ const { title, images } = gallery;
 </section>
 
 <script>
-  import Shuffle from "shufflejs";
   const element = document.getElementById("photo-gallery");
   if (!element) throw new Error("photo-gallery element not found");
   const sizer = element.querySelector<HTMLElement>(".js-shuffle-sizer");
   if (!sizer) throw new Error("js-shuffle-sizer element not found");
-  // Assumes you're using the UMD version of Shuffle (for example, from unpkg.com).
-  const shuffleInstance = new Shuffle(element, {
-    itemSelector: ".picture-item",
-    sizer: sizer,
-    columnWidth: 1,
-  });
 </script>

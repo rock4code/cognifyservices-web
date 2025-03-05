@@ -86,7 +86,7 @@ const {
 let page: PageType | undefined = undefined;
 
 if (entry_keys) {
-  const page_entry = await getEntry(...entry_keys);
+  const page_entry = await getEntry(...entry_keys) as any;
   if (page_entry) {
     page = page_entry.data as PageType;
   }

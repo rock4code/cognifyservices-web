@@ -5,14 +5,19 @@ import Base from "@/layouts/Base.astro";
 import { getEntry } from "astro:content";
 
 const entry = await getEntry("contact", "index");
+
+if (!entry) {
+  throw new Error("No se encontró la entrada para 'contact/index'.");
+}
+
 const { contact_form_action } = config.params;
 ---
 
-<Base
-  entry_keys={["contact", "index"]}
->
-  <section class=" pb-6 pt-16">
-    <div class="container"><PageHeader page_data={entry.data} /></div>
+<Base entry_keys={["contact", "index"] as [keyof import("astro:content").ContentEntryMap, string]}>
+  <section class="pb-6 pt-16">
+    <div class="container">
+      {entry.data && <PageHeader page_data={entry.data} />}
+    </div>
   </section>
 
   <section class="section pt-0">
@@ -35,12 +40,12 @@ const { contact_form_action } = config.params;
               />
             </div>
             <div class="form-group mb-5">
-              <label class="form-label" for="eamil">Email Adrdess</label>
+              <label class="form-label" for="eamil">Email Address</label>
               <input
                 class="form-control"
                 type="text"
                 id="email"
-                placeholder="Your  Email Address"
+                placeholder="Your Email Address"
               />
             </div>
             <div class="form-group mb-5">
@@ -50,8 +55,8 @@ const { contact_form_action } = config.params;
                 <option value="hello">Wanted to say hello</option>
                 <option value="work-with-you">I want to work with you</option>
                 <option value="work-for-me">I want you to work for me</option>
-                <option value="investment plane-3">There's a project I want to discuss with you</option>
-                <option value="investment plane-3">Other</option>
+                <option value="investment">There's a project I want to discuss with you</option>
+                <option value="other">Other</option>
               </select>
             </div>
             <div class="form-group mb-5">

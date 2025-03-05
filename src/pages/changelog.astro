@@ -4,14 +4,20 @@ import Base from "@/layouts/Base.astro";
 import { getEntry } from "astro:content";
 
 const about = await getEntry("changelog", "index");
+
+if (!about) {
+  throw new Error("No se encontró la entrada para 'changelog/index'.");
+}
+
 const page_data = {
   ...about.data,
   content: about.body,
 };
+
 const { Content } = await about.render();
 ---
 
-<Base entry_keys={["changelog", "index"]}>
+<Base entry_keys={["changelog", "index"] as [keyof import("astro:content").ContentEntryMap, string]}>
   <section class="py-16">
     <div class="container">
       <div class="mx-auto max-w-[768px] text-center">
