@@ -30,7 +30,6 @@ const BASE_PATH = config.site?.base_path || "cognifyservices-web";
 
 export default defineConfig({
   site: BASE_URL,
-  base: BASE_PATH, // 🔥 Asegura rutas correctas en GitHub Pages
   trailingSlash: config.site?.trailing_slash ? "always" : "never",
   output: "static", // Importante para GitHub Pages
   build: {
