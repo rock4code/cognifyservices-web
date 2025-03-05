@@ -1,25 +1,16 @@
 @use "sass:meta";
-@include meta.load-css("themes.scss");
+@use "themes";
+@use "base";
+@use "components";
+@use "navigation";
+@use "utilities";
+@use "buttons";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  @include meta.load-css("base");
-}
-
-@layer components {
-  @include meta.load-css("components");
-  @include meta.load-css("navigation");
-  @include meta.load-css("utilities");
-  @include meta.load-css("buttons");
-}
-
-/**
- * Scrollbar styles
- */
-
+/* Estilos para el scrollbar */
 body {
   --sb-track-color: transparent;
   --sb-thumb-color: rgba(var(--primary), 0.6);
@@ -32,13 +23,12 @@ body::-webkit-scrollbar {
 
 body::-webkit-scrollbar-track {
   background: var(--sb-track-color);
-  // border-radius: 8px;
 }
 
 body::-webkit-scrollbar-thumb {
   background: var(--sb-thumb-color);
   border-radius: 8px;
-  border: 3px solid rgba(var(--background))
+  border: 3px solid rgba(var(--background));
 }
 
 @supports not selector(::-webkit-scrollbar) {
