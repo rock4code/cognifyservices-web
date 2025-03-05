@@ -1,20 +1,28 @@
-const plugin = require('tailwindcss/plugin')
+const plugin = require('tailwindcss/plugin');
 const theme_config = require("./src/config/theme.json");
 
-let fontPrimaryType, fontSecondaryType;
-if (theme_config.fonts.font_family.primary) {
-  fontPrimaryType = theme_config.fonts.font_family.primary_type;
-}
-if (theme_config.fonts.font_family.secondary) {
-  fontSecondaryType = theme_config.fonts.font_family.secondary_type;
+let fontPrimaryType = "sans-serif", fontSecondaryType = "sans-serif";
+
+if (theme_config.fonts?.font_family?.primary) {
+  fontPrimaryType = theme_config.fonts.font_family.primary_type || "sans-serif";
 }
 
+if (theme_config.fonts?.font_family?.secondary) {
+  fontSecondaryType = theme_config.fonts.font_family.secondary_type || "sans-serif";
+}
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
-  safelist: [{ pattern: /^col-/ }, ...theme_config.colors.flatMap((color) => [{ pattern: new RegExp(`bg-${color}`) }]), {pattern: /^btn-/}],
-  darkMode: "selector",
+  content: [
+    "./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}",
+    "./public/**/*.html",
+  ],
+  safelist: [
+    { pattern: /^col-/ }, 
+    { pattern: /^btn-/ },
+    ...theme_config.colors.flatMap((color) => [{ pattern: new RegExp(`bg-${color}`) }]),
+  ],
+  darkMode: "class", // Usar "class" para evitar problemas en GitHub Pages
   theme: {
     container: {
       center: true,
@@ -32,33 +40,28 @@ module.exports = {
         secondary: ["var(--font-secondary)", fontSecondaryType],
       },
       textShadow: {
-        // --tw-shadow-color is not defined in tailwindcss by now
         sm: '0 0px 2px var(--tw-shadow-color)',
         DEFAULT: '0 0px 3px var(--tw-shadow-color)',
         lg: '0 0px 8px var(--tw-shadow-color)',
       },
-
-      // Custom animations
-      // Defined keyframes
       keyframes: {
         "fade-in": {
           '0%': { transform: 'translateY(15pt)', opacity: 0 },
-          '100%': { transform: 'translateY(0pt)' },
+          '100%': { transform: 'translateY(0pt)', opacity: 1 },
         },
         "fade-out": {
-          '0%': { transform: 'translateY(0pt)' },
+          '0%': { transform: 'translateY(0pt)', opacity: 1 },
           '100%': { transform: 'translateY(15pt)', opacity: 0 },
         },
-        "dissappear": {
+        "disappear": {
           '0%': { opacity: 1, visibility: 'visible' },
-          '100%': { visibility: 'hidden', opacity: 0},
+          '100%': { opacity: 0, visibility: 'hidden' },
         },
       },
-      // Defined animations
       animation: {
         "fade-in": 'fade-in 1s ease-in-out',
         "fade-out": 'fade-out 1s ease-in-out',
-        "dissappear": 'dissappear 1.5s ease-in-out forwards',
+        "disappear": 'disappear 1.5s ease-in-out forwards',
       }
     },
   },
@@ -84,7 +87,7 @@ module.exports = {
           }),
         },
         { values: theme('textShadow') }
-      )
-    })
+      );
+    }),
   ],
 };

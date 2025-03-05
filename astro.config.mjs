@@ -6,25 +6,23 @@ import { defineConfig, sharpImageService } from "astro/config";
 import config from "./src/config/config.json";
 import AutoImport from "astro-auto-import";
 
-const BASE_URL = "https://rock4code.github.io/cognifyservices-web"; 
-const BASE_PATH = "/cognifyservices-web/"; 
+// Configuración para GitHub Pages
+const BASE_URL = "https://rock4code.github.io/cognifyservices-web";
+const BASE_PATH = "/cognifyservices-web/";
 
 export default defineConfig({
   site: BASE_URL,
-  base: BASE_PATH,
-  trailingSlash: config.site.trailing_slash ? "always" : "never",
+  base: BASE_PATH, // 🔥 IMPORTANTE para GitHub Pages
+  trailingSlash: "never",
   output: "static",
   build: {
     format: "directory",
   },
   vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: "modern-compiler",
-        },
-      },
+    build: {
+      outDir: "dist",
     },
+    base: BASE_PATH, // 🔥 Esto ayuda a que Vite sirva correctamente los archivos
   },
   image: {
     service: sharpImageService(),
