@@ -17,27 +17,27 @@ if (fs.existsSync(configPath)) {
   console.warn("⚠️ Warning: No se encontró 'config.json'. Usando configuración predeterminada.");
   config = {
     site: {
-      base_url: "https://rock4code.github.io/cognifyservices-web",
-      base_path: "/cognifyservices-web/",
+      base_url: "https://rock4code.github.io",
+      base_path: "cognifyservices-web",
       trailing_slash: false,
     },
   };
 }
 
-// Definir BASE_URL y BASE_PATH basados en config.json
-const BASE_URL = config.site?.base_url || "https://rock4code.github.io/cognifyservices-web";
-const BASE_PATH = config.site?.base_path || "/cognifyservices-web/";
+// Definir BASE_URL y BASE_PATH correctamente para GitHub Pages
+const BASE_URL = config.site?.base_url || "https://rock4code.github.io";
+const BASE_PATH = config.site?.base_path || "cognifyservices-web";
 
 export default defineConfig({
   site: BASE_URL,
-  base: BASE_PATH, // 🔥 Asegura que los archivos estáticos se sirvan correctamente en GitHub Pages
+  base: BASE_PATH, // 🔥 Asegura rutas correctas en GitHub Pages
   trailingSlash: config.site?.trailing_slash ? "always" : "never",
-  output: "static",
+  output: "static", // Importante para GitHub Pages
   build: {
-    format: "directory",
+    format: "directory", // Asegura compatibilidad con GitHub Pages
   },
   vite: {
-    base: BASE_PATH, // 🔥 Necesario para corregir rutas en archivos estáticos en Vite
+    base: BASE_PATH, // 🔥 Necesario para que los assets carguen correctamente en producción
     css: {
       preprocessorOptions: {
         scss: {
