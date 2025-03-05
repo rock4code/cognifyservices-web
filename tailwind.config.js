@@ -34,8 +34,7 @@ module.exports = {
     "./public/**/*.html",
   ],
   safelist: [
-    { pattern: /^col-/ },
-    { pattern: /^btn-/ },
+    { pattern: /.*/ },
     ...(theme_config.colors || []).flatMap((color) => [{ pattern: new RegExp(`bg-${color}`) }]),
   ],
   darkMode: "class", // Evita problemas en GitHub Pages
