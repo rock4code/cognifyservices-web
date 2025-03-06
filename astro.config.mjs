@@ -18,15 +18,14 @@ if (fs.existsSync(configPath)) {
   config = {
     site: {
       base_url: "https://rock4code.github.io",
-      base_path: "cognifyservices-web",
+      base_path: "/",
       trailing_slash: false,
     },
   };
 }
 
-// Definir BASE_URL y BASE_PATH correctamente para GitHub Pages
 const BASE_URL = config.site?.base_url || "https://rock4code.github.io";
-const BASE_PATH = config.site?.base_path || "cognifyservices-web";
+const BASE_PATH = config.site?.base_path || "/";
 
 export default defineConfig({
   site: BASE_URL,
