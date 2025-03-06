@@ -7,7 +7,6 @@ import AutoImport from "astro-auto-import";
 import fs from "fs";
 import path from "path";
 
-// Cargar configuración desde config.json de forma segura
 let config = {};
 const configPath = path.resolve("./src/config/config.json");
 
@@ -30,12 +29,12 @@ const BASE_PATH = config.site?.base_path || "/";
 export default defineConfig({
   site: BASE_URL,
   trailingSlash: config.site?.trailing_slash ? "always" : "never",
-  output: "static", // Importante para GitHub Pages
+  output: "static",
   build: {
-    format: "directory", // Asegura compatibilidad con GitHub Pages
+    format: "directory",
   },
   vite: {
-    base: BASE_PATH, // 🔥 Necesario para que los assets carguen correctamente en producción
+    base: BASE_PATH,
     css: {
       preprocessorOptions: {
         scss: {
